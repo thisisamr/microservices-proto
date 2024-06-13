@@ -1,53 +1,25 @@
-SERVICE_NAME ?= order
-RELEASE_VERSION ?= latest
+# Variables
+SERVICE_NAME ?= 
+RELEASE_VERSION ?= 
 
-all: init generate_order generate_payment generate_shipping create_modules
-clean:
-	rm -rf ./go
-create_dir:
-	mkdir -p go/order
-	mkdir -p go/payment
-	mkdir -p go/shipping
-generate_order:
-	protoc -I ./order \
-	--go_out ./go/order \
-	--go_opt paths=source_relative \
-	--go-grpc_out ./go/order \
-	--go-grpc_opt paths=source_relative \
-	./order/order.proto
+# Define tasks
+install_protobuf:
+	sudo apt-get install -y protobuf-compiler golang-goprotobuf-dev
 
-generate_shipping:
-		protoc -I ./shipping \
-	--go_out ./go/shipping \
-	--go_opt paths=source_relative \
-	--go-grpc_out ./go/shipping \
-	--go-grpc_opt paths=source_relative \
-	./shipping/shipping.proto
-generate_payment:
-		protoc -I ./payment \
-	--go_out ./go/payment \
-	--go_opt paths=source_relative \
-	--go-grpc_out ./go/payment \
-	--go-grpc_opt paths=source_relative \
-	./payment/payment.proto
-init: clean create_dir
+install_go_tools:
+	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 
-create_modules: create_modules_order create_modules_payment create_modules_shipping
+generate_proto:
+	protoc --go_out=./go/${SERVICE_NAME} --go_opt=paths=source_relative \
+	       --go-grpc_out=./go/${SERVICE_NAME} --go-grpc_opt=paths=source_relative \
+	       ./${SERVICE_NAME}/*.proto
 
-create_modules_order:
-	cd go/order && \
-	go mod init github.com/thisisamr/microservices-proto/go/order  && go mod tidy\
+create_go_module:
+	cd golang/${SERVICE_NAME} && \
+	go mod init github.com/thisisamr/microservices-proto/go/${SERVICE_NAME} || true && \
+	go mod tidy
 
-create_modules_shipping:
-	cd go/shipping && \
-	go mod init github.com/thisisamr/microservices-proto/go/shipping  && go mod tidy\
-
-create_modules_payment:
-	cd go/payment && \
-	go mod init github.com/thisisamr/microservices-proto/go/payment  && go mod tidy\
-
-update-repo: git_config git_commit_and_tag
-# Define git tasks
 git_config:
 	git config --global user.email "thisissoliman@protonmail.com"
 	git config --global user.name "Amr Soliman"
@@ -56,3 +28,15 @@ git_commit_and_tag:
 	git add . && git commit -am "proto update" || true
 	git tag -fa go/${SERVICE_NAME}/${RELEASE_VERSION} -m "go/${SERVICE_NAME}/${RELEASE_VERSION}"
 	git push origin refs/tags/go/${SERVICE_NAME}/${RELEASE_VERSION}
+
+clean:
+	rm -rf ./go/${SERVICE_NAME}
+create_dir:
+	mkdir -p go/${SERVICE_NAME}
+
+init:clean create_dir
+
+# Define the main task sequence
+all: install_protobuf install_go_tools generate_proto create_go_module git_config git_commit_and_tag
+
+.PHONY: install_protobuf install_go_tools generate_proto create_go_module git_config git_commit_and_tag all
