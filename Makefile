@@ -36,6 +36,6 @@ init:
 
 
 # Define the main task sequence
-all: install_protobuf install_go_tools init generate_proto create_go_module git_config git_commit_and_tag
+all: install_protobuf install_go_tools generate_proto create_go_module git_config git_commit_and_tag
 
 .PHONY: install_protobuf install_go_tools generate_proto create_go_module git_config git_commit_and_tag all
