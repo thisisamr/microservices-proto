@@ -19,9 +19,6 @@ jobs:
       - name: Install Make
         run: sudo apt-get install -y make
 
-      - name: Generate directory
-        run: make init SERVICE_NAME=${{ matrix.service }}
-      
       - name: make
         run: make all  SERVICE_NAME=${{ matrix.service }} RELEASE_VERSION=${{ env.RELEASE_VERSION }}
       
