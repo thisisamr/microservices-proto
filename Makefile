@@ -1,3 +1,6 @@
+SERVICE_NAME ?= order
+RELEASE_VERSION ?= latest
+
 all: init generate_order generate_payment generate_shipping create_modules
 clean:
 	rm -rf ./go
@@ -30,6 +33,7 @@ generate_payment:
 init: clean create_dir
 
 create_modules: create_modules_order create_modules_payment create_modules_shipping
+
 create_modules_order:
 	cd go/order && \
 	go mod init github.com/thisisamr/microservices-proto/go/order  && go mod tidy\
@@ -41,3 +45,13 @@ create_modules_shipping:
 create_modules_payment:
 	cd go/payment && \
 	go mod init github.com/thisisamr/microservices-proto/go/payment  && go mod tidy\
+
+# Define git tasks
+git_config:
+	git config --global user.email "thisissoliman@protonmail.com"
+	git config --global user.name "Amr Soliman"
+
+git_commit_and_tag:
+	git add . && git commit -am "proto update" || true
+	git tag -fa golang/${SERVICE_NAME}/${RELEASE_VERSION} -m "golang/${SERVICE_NAME}/${RELEASE_VERSION}"
+	git push origin refs/tags/golang/${SERVICE_NAME}/${RELEASE_VERSION}
