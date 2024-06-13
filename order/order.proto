@@ -3,8 +3,9 @@ syntax ="proto3";
 option go_package="github.com/thisisamr/microservices-proto/order";
 message CreateOrderRequest {
 int64 user_id = 1;
-repeated Item items = 2;
-float total_price = 3;
+string user_email =2;
+repeated Item items = 3;
+float total_price = 4;
 }
 message Item {
 string name = 1;
