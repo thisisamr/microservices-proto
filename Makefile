@@ -27,7 +27,7 @@ git_config:
 git_commit_and_tag:
 	git add . && git commit -am "proto update" || true
 	git tag -fa go/${SERVICE_NAME}/${RELEASE_VERSION} -m "go/${SERVICE_NAME}/${RELEASE_VERSION}"
-	git push origin refs/tags/go/${SERVICE_NAME}/${RELEASE_VERSION}
+	git push origin main
 
 init:
 	rm -rf ./go/${SERVICE_NAME} &&\
