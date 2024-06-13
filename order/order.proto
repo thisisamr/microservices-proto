@@ -4,8 +4,9 @@ option go_package="github.com/thisisamr/microservices-proto/order";
 message CreateOrderRequest {
 int64 user_id = 1;
 string user_email =2;
-repeated Item items = 3;
-float total_price = 4;
+int64 user_account_number=3;
+repeated Item items = 4;
+float total_price = 5;
 }
 message Item {
 string name = 1;
