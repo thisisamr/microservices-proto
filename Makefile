@@ -29,12 +29,11 @@ git_commit_and_tag:
 	git tag -fa go/${SERVICE_NAME}/${RELEASE_VERSION} -m "go/${SERVICE_NAME}/${RELEASE_VERSION}"
 	git push origin refs/tags/go/${SERVICE_NAME}/${RELEASE_VERSION}
 
-clean:
-	rm -rf ./go/${SERVICE_NAME}
-create_dir:
+init:
+	rm -rf ./go/${SERVICE_NAME} &&\
 	mkdir -p go/${SERVICE_NAME}
 
-init:clean create_dir
+
 
 # Define the main task sequence
 all: install_protobuf install_go_tools generate_proto create_go_module git_config git_commit_and_tag
