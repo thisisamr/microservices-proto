@@ -16,7 +16,7 @@ generate_proto:
 	       ./${SERVICE_NAME}/*.proto
 
 create_go_module:
-	cd golang/${SERVICE_NAME} && \
+	cd go/${SERVICE_NAME} && \
 	go mod init github.com/thisisamr/microservices-proto/go/${SERVICE_NAME} || true && \
 	go mod tidy
 
