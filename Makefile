@@ -1,6 +1,6 @@
 # Variables
-SERVICE_NAME ?= 
-RELEASE_VERSION ?= 
+SERVICE_NAME ?=
+RELEASE_VERSION ?=
 
 # Define tasks
 install_protobuf:
@@ -33,9 +33,7 @@ init:
 	rm -rf ./go/${SERVICE_NAME} &&\
 	mkdir -p go/${SERVICE_NAME}
 
-
-
 # Define the main task sequence
-all: install_protobuf install_go_tools generate_proto create_go_module git_config git_commit_and_tag
+all: init install_protobuf install_go_tools generate_proto create_go_module git_config git_commit_and_tag
 
-.PHONY: install_protobuf install_go_tools generate_proto create_go_module git_config git_commit_and_tag all
+.PHONY: install_protobuf install_go_tools generate_proto create_go_module git_config git_commit_and_tag init all

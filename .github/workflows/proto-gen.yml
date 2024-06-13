@@ -12,6 +12,8 @@ jobs:
       matrix:
         service: ["order", "payment", "shipping"]
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       - name: Extract Release Version
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
@@ -19,9 +21,5 @@ jobs:
       - name: Install Make
         run: sudo apt-get install -y make
 
-      - name : initialize directory
-        run: make init
-
-      - name: make
-        run: make all  SERVICE_NAME=${{ matrix.service }} RELEASE_VERSION=${{ env.RELEASE_VERSION }}
-      
+      - name: Make All
+        run: make all SERVICE_NAME=${{ matrix.service }} RELEASE_VERSION=${{ env.RELEASE_VERSION }}
