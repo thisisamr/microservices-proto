@@ -25,5 +25,14 @@ jobs:
       - name: Install Make
         run: sudo apt-get install -y make
 
+      - name: Generate directories
+        run: make init
+
       - name: Generate Protobuf Stubs and Update Go Modules
-        run: make all SERVICE_NAME=${{ matrix.service }} RELEASE_VERSION=${{ env.RELEASE_VERSION }}
+        run: make generate_${{ matrix.service }} SERVICE_NAME=${{ matrix.service }} RELEASE_VERSION=${{ env.RELEASE_VERSION }}
+      
+      - name: Create Go Modules for ${{ matrix.service }}
+        run: make create_modules_${{ matrix.service }}
+      
+      - name: update repo
+        run: make update-repo SERVICE_NAME=${{ matrix.service }} RELEASE_VERSION=${{ env.RELEASE_VERSION }}

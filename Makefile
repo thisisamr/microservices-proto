@@ -46,6 +46,7 @@ create_modules_payment:
 	cd go/payment && \
 	go mod init github.com/thisisamr/microservices-proto/go/payment  && go mod tidy\
 
+update-repo: git_config git_commit_and_tag
 # Define git tasks
 git_config:
 	git config --global user.email "thisissoliman@protonmail.com"
@@ -53,5 +54,5 @@ git_config:
 
 git_commit_and_tag:
 	git add . && git commit -am "proto update" || true
-	git tag -fa golang/${SERVICE_NAME}/${RELEASE_VERSION} -m "golang/${SERVICE_NAME}/${RELEASE_VERSION}"
-	git push origin refs/tags/golang/${SERVICE_NAME}/${RELEASE_VERSION}
+	git tag -fa go/${SERVICE_NAME}/${RELEASE_VERSION} -m "go/${SERVICE_NAME}/${RELEASE_VERSION}"
+	git push origin refs/tags/go/${SERVICE_NAME}/${RELEASE_VERSION}
